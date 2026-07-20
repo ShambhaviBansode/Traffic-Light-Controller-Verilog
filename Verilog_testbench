@@ -1,0 +1,75 @@
+`timescale 1ns / 1ps
+
+//////////////////////////////////////////////////////////////////////////////////
+// Testbench for Traffic Light Controller
+//////////////////////////////////////////////////////////////////////////////////
+
+module Traffic_Light_Controller_TB;
+
+reg clk;
+reg rst;
+
+wire [2:0] light_M1;
+wire [2:0] light_M2;
+wire [2:0] light_MT;
+wire [2:0] light_S;
+
+//==========================
+// Instantiate DUT
+//==========================
+
+Traffic_Light_Controller dut(
+
+    .clk(clk),
+    .rst(rst),
+
+    .light_M1(light_M1),
+    .light_M2(light_M2),
+    .light_MT(light_MT),
+    .light_S(light_S)
+
+);
+
+//==========================
+// Clock Generation
+//==========================
+
+initial
+begin
+    clk = 0;
+    forever #5 clk = ~clk;      // 10 ns clock period
+end
+
+//==========================
+// Reset Generation
+//==========================
+
+initial
+begin
+    rst = 1;
+
+    #20;
+    rst = 0;
+
+    #500;
+
+    $finish;
+end
+
+//==========================
+// Monitor
+//==========================
+
+initial
+begin
+
+    $monitor("Time=%0t  State Lights: M1=%b  M2=%b  MT=%b  S=%b",
+              $time,
+              light_M1,
+              light_M2,
+              light_MT,
+              light_S);
+
+end
+
+endmodule
